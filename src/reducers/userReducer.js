@@ -40,6 +40,7 @@ const userReducers = (state = initialState, action) => {
           student.fullName.includes(action.searchValue.trim())
         );
       });
+
       return { ...state, searchList };
     }
 

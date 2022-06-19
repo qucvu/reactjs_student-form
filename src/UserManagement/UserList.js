@@ -3,12 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 const UserList = () => {
-  const { users } = useSelector((state) => {
+  const { users, searchList } = useSelector((state) => {
     return {
       users: state.user.users,
+      searchList: state.user.searchList,
     };
   });
-
+  const list = searchList || users;
   const disaptch = useDispatch();
 
   const handleDeleteStudent = (id) => {
@@ -40,7 +41,7 @@ const UserList = () => {
         </tr>
       </thead>
       <tbody>
-        {users.map((user) => {
+        {list.map((user) => {
           return (
             <tr key={user.idStudent}>
               <td>{user.idStudent}</td>
