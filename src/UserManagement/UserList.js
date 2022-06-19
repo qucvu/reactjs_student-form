@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 const UserList = () => {
-  const { users, searchList } = useSelector((state) => {
+  const { users, searchValue } = useSelector((state) => {
     return {
       users: state.user.users,
-      searchList: state.user.searchList,
+      searchValue: state.user.searchValue,
     };
   });
-  const list = searchList || users;
+  // const list = searchList || users;
   const disaptch = useDispatch();
 
   const handleDeleteStudent = (id) => {
@@ -41,29 +41,36 @@ const UserList = () => {
         </tr>
       </thead>
       <tbody>
-        {list.map((user) => {
-          return (
-            <tr key={user.idStudent}>
-              <td>{user.idStudent}</td>
-              <td>{user.fullName}</td>
-              <td>{user.phone}</td>
-              <td>{user.email}</td>
-              <td>
-                <button
-                  className="btn btn-info me-2"
-                  onClick={() => handleSelectedStudent(user)}
-                >
-                  Update
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDeleteStudent(user.idStudent)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          );
+        {users.map((user) => {
+          if (
+            user.fullName
+              .toLowerCase()
+              .trim()
+              .includes(searchValue.trim().toLowerCase())
+          )
+            return (
+              <tr key={user.idStudent}>
+                <td>{user.idStudent}</td>
+                <td>{user.fullName}</td>
+                <td>{user.phone}</td>
+                <td>{user.email}</td>
+                <td>
+                  <button
+                    className="btn btn-info me-2"
+                    onClick={() => handleSelectedStudent(user)}
+                  >
+                    Update
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDeleteStudent(user.idStudent)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            );
+          return null;
         })}
       </tbody>
     </table>

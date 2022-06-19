@@ -1,7 +1,7 @@
 const initialState = {
   users: [],
   selectedStudent: {},
-  searchList: null,
+  searchValue: "",
 };
 const userReducers = (state = initialState, action) => {
   switch (action.type) {
@@ -32,16 +32,15 @@ const userReducers = (state = initialState, action) => {
       };
     }
     case "SEARCH_STUDENT_NAME": {
-      const searchList = state.users.filter((student) => {
-        return (
-          student.fullName
-            .toLowerCase()
-            .includes(action.searchValue.trim().toLowerCase()) ||
-          student.fullName.includes(action.searchValue.trim())
-        );
-      });
-
-      return { ...state, searchList };
+      // const searchList = state.users.filter((student) => {
+      //   return (
+      //     student.fullName
+      //       .toLowerCase()
+      //       .includes(action.searchValue.trim().toLowerCase()) ||
+      //     student.fullName.includes(action.searchValue.trim())
+      //   );
+      // });
+      return { ...state, searchValue: action.searchValue };
     }
 
     case "GET_STUDENTLIST_FROM_LOCAL": {

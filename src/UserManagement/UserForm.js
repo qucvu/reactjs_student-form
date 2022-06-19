@@ -9,11 +9,14 @@ const UserForm = () => {
     fullName: "",
     email: "",
   });
-  const { student } = useSelector((state) => {
+  const { student, users } = useSelector((state) => {
     return {
       student: state.user.selectedStudent,
+      users: state.user.users,
     };
   });
+
+  const [errorId, setErrorId] = useState(false);
   const handleChangeInput = (evt) => {
     const { name, value } = evt.target;
     setValues((values) => ({
@@ -24,14 +27,27 @@ const UserForm = () => {
 
   const disaptch = useDispatch();
 
+  const checkIdDuplicate = () => {
+    const index = users.findIndex(
+      (student) => student.idStudent === values.idStudent
+    );
+    console.log(index);
+    return index !== -1;
+  };
+
   const handleSubmitForm = (evt) => {
     evt.preventDefault();
     if (student.idStudent) {
       disaptch({ type: "UPDATE_STUDENT", id: student.idStudent, values });
     } else {
+      if (checkIdDuplicate()) {
+        setErrorId(true);
+        return;
+      }
       disaptch({ type: "CREATE_STUDENT", student: values });
     }
     setValues({ idStudent: "", phone: "", fullName: "", email: "" });
+    setErrorId(false);
   };
 
   useEffect(() => {
@@ -55,12 +71,14 @@ const UserForm = () => {
               value={values.idStudent || ""}
               name="idStudent"
               onChange={handleChangeInput}
+              required
             />
-            {!student.idStudent && (
-              <div id="idHelp" className="form-text fw-bold">
-                Vui lòng nhập đúng!!
-              </div>
-            )}
+
+            <div id="idHelp" className="form-text fw-bold text-danger">
+              {!errorId
+                ? !student.idStudent && "Vui lòng nhập đúng!!"
+                : "*ID đã tồn tại"}
+            </div>
           </div>
           <div className="mb-3">
             <label htmlFor="phone" className="form-label fw-bold">
@@ -74,6 +92,7 @@ const UserForm = () => {
               value={values.phone || ""}
               name="phone"
               onChange={handleChangeInput}
+              required
             />
           </div>
         </div>
@@ -91,6 +110,7 @@ const UserForm = () => {
               value={values.fullName || ""}
               name="fullName"
               onChange={handleChangeInput}
+              required
             />
           </div>
           <div className="mb-3">
@@ -105,6 +125,7 @@ const UserForm = () => {
               value={values.email || ""}
               name="email"
               onChange={handleChangeInput}
+              required
             />
           </div>
         </div>
